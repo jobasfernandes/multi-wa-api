@@ -1,0 +1,26 @@
+# Dependencia para dev local + testes.
+#
+#   docker compose -f docker-compose.dev.yml up -d     # start
+#   docker compose -f docker-compose.dev.yml down      # stop (mantendo dados)
+#   docker compose -f docker-compose.dev.yml down -v   # stop + remove dados
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: multi-wa-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: multi_wa
+    ports:
+      - '5432:5432'
+    volumes:
+      - multi-wa-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d multi_wa']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  multi-wa-pgdata:
