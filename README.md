@@ -315,10 +315,11 @@ real + parsing de SSE), as rotas da API (`fastify.inject`) e um round-trip real 
 migração `baileys ↔ zapo` via `wa-store-migrate`.
 
 Testes de integração com Postgres (repositórios + auth contra um banco real) rodam
-apenas quando `TEST_DATABASE_URL` está definido — caso contrário são pulados:
+apenas quando `TEST_DATABASE_URL` está definido — caso contrário são pulados. O
+`docker-compose.dev.yml` já cria o banco `multi_wa_test` para isso:
 
 ```bash
-TEST_DATABASE_URL=postgres://user:pass@localhost:5432/multi_wa_test \
+TEST_DATABASE_URL=postgres://postgres:postgres@localhost:5432/multi_wa_test \
   pnpm --filter @multi-wa/core test
 ```
 

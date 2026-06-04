@@ -16,6 +16,7 @@ services:
       - '5432:5432'
     volumes:
       - multi-wa-pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/initdb:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres -d multi_wa']
       interval: 5s
