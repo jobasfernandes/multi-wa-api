@@ -69,16 +69,27 @@ sdk ──▶ types
 
 - Node.js >= 20.9
 - pnpm >= 10
-- PostgreSQL >= 13
+- PostgreSQL >= 13 — ou **Docker + Docker Compose**, para subir o Postgres local com o
+  `docker-compose.dev.yml` incluso
 
 ## Início rápido
 
+O único serviço externo que a API precisa é o **PostgreSQL**. O `docker-compose.dev.yml`
+incluso sobe esse Postgres com usuário, senha, porta e banco idênticos aos defaults do
+`.env.example` — então o `.env` funciona **sem editar nada**:
+
 ```bash
 pnpm install
-cp .env.example .env          # edite DATABASE_URL, JWT_SECRET e o admin de bootstrap
-pnpm db:migrate               # cria as tabelas
-pnpm dev                      # sobe apps/api em http://localhost:3000
+cp .env.example .env                              # funciona como está — casa com o compose
+docker compose -f docker-compose.dev.yml up -d    # sobe o Postgres em localhost:5432
+pnpm dev                                          # aplica migrations no boot e sobe a API em http://localhost:3000
 ```
+
+As migrations rodam automaticamente no boot. Para parar o banco use
+`docker compose -f docker-compose.dev.yml down` (acrescente `-v` para também apagar os
+dados). Em produção, gere um `JWT_SECRET` real e troque a senha do admin de bootstrap
+(veja [Configuração](#configuração)). Já tem um Postgres próprio? Pule o compose e ajuste
+`DATABASE_URL` no `.env`.
 
 Fluxo mínimo com `curl`:
 
